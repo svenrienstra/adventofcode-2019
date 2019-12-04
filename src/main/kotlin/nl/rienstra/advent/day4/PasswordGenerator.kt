@@ -1,16 +1,15 @@
 package nl.rienstra.advent.day4
 
 object PasswordGenerator {
-    fun generatePassword(start: String, end: String): List<String> {
-        val passwords = mutableListOf<String>()
-        var current = start
-        while (current.toInt() < end.toInt()) {
-            val next = (current.toInt() + 1).toString()
-            if (isValid(next)) passwords.add(next)
-            current = next
-        }
-        return passwords
-    }
+
+    tailrec fun generatePasswords(current: String, end: String, passwords: List<String> = emptyList()): List<String> =
+            when (current.toInt() < end.toInt()) {
+                true -> generatePasswords(next(current), end,
+                        if (isValid(next(current))) passwords.plus(next(current)) else passwords)
+                false -> passwords
+            }
+
+    private fun next(current: String) = (current.toInt() + 1).toString()
 
     fun isValid(password: String) =
             password

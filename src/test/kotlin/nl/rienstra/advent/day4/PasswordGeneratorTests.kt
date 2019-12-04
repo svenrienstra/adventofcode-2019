@@ -13,8 +13,8 @@ class PasswordGeneratorTests : WordSpec({
         }
 
         "generate passwords" {
-            println(PasswordGenerator.generatePassword("171309", "643603"))
-            println(PasswordGenerator.generatePassword("171309", "643603").size)
+            println(PasswordGenerator.generatePasswords("171309", "643603"))
+            println(PasswordGenerator.generatePasswords("171309", "643603").size)
         }
     }
 })
