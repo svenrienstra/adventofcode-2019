@@ -12,9 +12,14 @@ object WireLocator {
                     .mapToInt { point -> point.x.absoluteValue + point.y.absoluteValue }
                     .min().asInt
 
-    fun calculateShortestPath(input1: List<String>, input2: List<String>) = calculateIntersections(input1, input2).stream()
-            .mapToInt { intersection -> toPointsList(input1).indexOf(intersection) + toPointsList(input2).indexOf(intersection) }
-            .min().asInt
+    fun calculateShortestPath(input1: List<String>, input2: List<String>): Int {
+        val pointList1 = toPointsList(input1)
+        val pointList2 = toPointsList(input2)
+
+        return calculateIntersections(input1, input2).stream()
+                .mapToInt { intersection -> pointList1.indexOf(intersection) + pointList2.indexOf(intersection) }
+                .min().asInt
+    }
 
     fun calculateIntersections(input1: List<String>, input2: List<String>) = toPointsList(input1).intersect(toPointsList(input2)).minusElement(Point(0, 0))
 
@@ -29,13 +34,12 @@ object WireLocator {
         }
     }
 
-    private fun toPointsList(input: List<String>): MutableList<Point> {
-        val points = mutableListOf(Point(0, 0))
-        for (command in input) {
-           points.addAll(toPoints(command, points.last().x, points.last().y))
-        }
-        return points
-    }
+    private tailrec fun toPointsList(input: List<String>, points: List<Point> = listOf(Point(0, 0))): List<Point> =
+            when (input.isEmpty()) {
+                true -> points
+                false -> toPointsList(input.subList(1, input.size),
+                        points.plus(toPoints(input.first(), points.last().x, points.last().y)))
+            }
 
     data class Point(val x: Int, val y: Int)
 }
