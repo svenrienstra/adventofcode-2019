@@ -1,23 +1,52 @@
 package nl.rienstra.advent.day2
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
-class IntCode(val inputValue: Int) {
 
-    tailrec fun run(input: IntArray, index: Int = 0): IntArray = if (input[index] != 99 && index < input.size) {
+class IntCode(private val inputChannel: ReceiveChannel<Int>,
+              private val outputChannel: SendChannel<Int>,
+              private val label: String? = null) {
+    constructor(singleInputValue: Int) : this(listOf(singleInputValue))
+    constructor(inputList: List<Int>, createdInputChannel: Channel<Int> = Channel()) : this(createdInputChannel, Channel()) {
+        GlobalScope.launch { inputList.forEach { createdInputChannel.send(it) } }
+    }
+    
+    fun run(input: IntArray) = runBlocking { runComputer(input) }
+
+    tailrec suspend fun runComputer(input: IntArray, index: Int = 0): IntArray = if (input[index] != 99 && index < input.size) {
         val output = calculateRow(input, index)
-        run(output.first, output.second)
-    } else input
+        runComputer(output.first, output.second)
+    } else {
+        println("$label done"); input
+    }
 
-    private fun calculateRow(input: IntArray, index: Int) = when (input[index].toString().last().toString().toInt()) {
+    private suspend fun calculateRow(input: IntArray, index: Int) = when (input[index].toString().last().toString().toInt()) {
         1 -> Pair(input.copyOf().apply { this[input[index + 3]] = getParameter(input, index, 1) + getParameter(input, index, 2) }, index + 4)
         2 -> Pair(input.copyOf().apply { this[input[index + 3]] = getParameter(input, index, 1) * getParameter(input, index, 2) }, index + 4)
-        3 -> Pair(input.copyOf().apply { this[input[index + 1]] = inputValue }, index + 2)
-        4 -> { println(getParameter(input, index, 1)); Pair(input.copyOf(), index + 2) }
+        3 -> {
+            Pair(input.copyOf().apply { this[input[index + 1]] = readInput() }, index + 2)
+        }
+        4 -> {
+            println(getParameter(input, index, 1));
+            outputChannel.send(getParameter(input, index, 1));
+            Pair(input.copyOf(), index + 2)
+        }
         5 -> Pair(input.copyOf(), if (getParameter(input, index, 1) != 0) getParameter(input, index, 2) else index + 3)
         6 -> Pair(input.copyOf(), if (getParameter(input, index, 1) == 0) getParameter(input, index, 2) else index + 3)
         7 -> Pair(input.copyOf().apply { this[input[index + 3]] = if (getParameter(input, index, 1) < getParameter(input, index, 2)) 1 else 0 }, index + 4)
         8 -> Pair(input.copyOf().apply { this[input[index + 3]] = if (getParameter(input, index, 1) == getParameter(input, index, 2)) 1 else 0 }, index + 4)
         else -> Pair(input.copyOf(), index + 4)
+    }
+
+    private suspend fun readInput(): Int {
+        val input = inputChannel.receive()
+        println("$label consumed $input")
+        return input
     }
 
     private fun getParameter(input: IntArray, opIndex: Int, parameterIndex: Int) =
