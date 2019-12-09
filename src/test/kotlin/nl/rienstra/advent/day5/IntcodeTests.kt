@@ -2,6 +2,7 @@ package nl.rienstra.advent.day5
 
 import io.kotlintest.specs.WordSpec
 import nl.rienstra.advent.day2.IntCode
+import nl.rienstra.advent.day2.toMap
 
 class IntcodeTests : WordSpec({
 
@@ -44,7 +45,7 @@ class IntcodeTests : WordSpec({
                     .map { it.toInt() }
                     .toIntArray()
 
-            println(IntCode(5).run(input).asList())
+            println(IntCode(5).run(input).toMap())
         }
     }
 
