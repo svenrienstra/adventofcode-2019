@@ -8,7 +8,7 @@ import kotlin.math.atan2
 import kotlin.math.floor
 import kotlin.math.round
 
-object AstroidRadar {
+object AsteroidRadar {
     fun calculateBlockedCoordinates(viewPoint: Point, asteroid: Point, maxNumber: Int = 15): List<Point> {
         if (viewPoint == asteroid) {
             return emptyList()

@@ -6,17 +6,17 @@ import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
-class AstroidRadarTests : WordSpec() {
+class AsteroidRadarTests : WordSpec() {
 
     init {
-        "AstroidRadar" should
+        "AsteroidRadar" should
                 {
                     "calculate blocked sight" {
-                        AstroidRadar.calculateBlockedCoordinates(Point(0, 0), Point(3, 1), 2) shouldBe listOf(Point(6, 2), Point(9, 3))
-                        AstroidRadar.calculateBlockedCoordinates(Point(0, 0), Point(3, 2), 2) shouldBe listOf(Point(6, 4), Point(9, 6))
-                        AstroidRadar.calculateBlockedCoordinates(Point(0, 0), Point(3, 3), 3) shouldBe listOf(Point(4, 4), Point(5, 5), Point(6, 6))
-                        AstroidRadar.calculateBlockedCoordinates(Point(0, 0), Point(2, 3), 2) shouldBe listOf(Point(4, 6), Point(6, 9))
-                        AstroidRadar.calculateBlockedCoordinates(Point(0, 0), Point(2, 4), 2) shouldBe listOf(Point(3, 6), Point(4, 8))
+                        AsteroidRadar.calculateBlockedCoordinates(Point(0, 0), Point(3, 1), 2) shouldBe listOf(Point(6, 2), Point(9, 3))
+                        AsteroidRadar.calculateBlockedCoordinates(Point(0, 0), Point(3, 2), 2) shouldBe listOf(Point(6, 4), Point(9, 6))
+                        AsteroidRadar.calculateBlockedCoordinates(Point(0, 0), Point(3, 3), 3) shouldBe listOf(Point(4, 4), Point(5, 5), Point(6, 6))
+                        AsteroidRadar.calculateBlockedCoordinates(Point(0, 0), Point(2, 3), 2) shouldBe listOf(Point(4, 6), Point(6, 9))
+                        AsteroidRadar.calculateBlockedCoordinates(Point(0, 0), Point(2, 4), 2) shouldBe listOf(Point(3, 6), Point(4, 8))
                     }
 
                     "calculateBestRadarLocation" {
@@ -32,7 +32,7 @@ class AstroidRadarTests : WordSpec() {
                                 .bufferedReader()
                                 .readLines()
 
-                        val best = AstroidRadar.calculateBestRadarLocation(input)
+                        val best = AsteroidRadar.calculateBestRadarLocation(input)
                         println(best.second)
                     }
 
@@ -68,7 +68,7 @@ class AstroidRadarTests : WordSpec() {
                                 .bufferedReader()
                                 .readLines()
 
-                        val output = AstroidRadar.vaporizeAsteroids(input)
+                        val output = AsteroidRadar.vaporizeAsteroids(input)
                         output[0] shouldBe Point(8, 1)
                         output[1] shouldBe Point(9, 0)
                         output[2] shouldBe Point(9, 1)
@@ -109,7 +109,7 @@ class AstroidRadarTests : WordSpec() {
                         val input2 = this::class.java.getResourceAsStream("/day10/example5")
                                 .bufferedReader()
                                 .readLines()
-                        val output2 = AstroidRadar.vaporizeAsteroids(input2)
+                        val output2 = AsteroidRadar.vaporizeAsteroids(input2)
 
                         output2[0] shouldBe Point(11,12)
                         output2[1] shouldBe Point(12,1)
@@ -129,7 +129,7 @@ class AstroidRadarTests : WordSpec() {
                                 .bufferedReader()
                                 .readLines()
 
-                        val output = AstroidRadar.vaporizeAsteroids(input)
+                        val output = AsteroidRadar.vaporizeAsteroids(input)
                         println(output[199])
                     }
                 }
@@ -140,7 +140,7 @@ class AstroidRadarTests : WordSpec() {
                 .bufferedReader()
                 .readLines()
 
-        val best = AstroidRadar.calculateBestRadarLocation(example)
+        val best = AsteroidRadar.calculateBestRadarLocation(example)
         best.second shouldBe number
         best.first shouldBe location
     }
