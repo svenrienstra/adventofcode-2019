@@ -61,6 +61,7 @@ class IntCode(private val inputChannel: ReceiveChannel<Long>,
     }
 
     private suspend fun readInput(): Long {
+        println("$label waiting for input")
         val input = inputChannel.receive()
         println("$label consumed $input")
         return input
