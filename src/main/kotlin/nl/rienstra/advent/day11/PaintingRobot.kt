@@ -47,7 +47,7 @@ class PaintingRobot(val input: Channel<Long>, val output: Channel<Long>) {
         val maxX = colours.maxBy { it.key.x }!!.key.x
         val minX = colours.minBy { it.key.x }!!.key.x
 
-        for (y in minY..maxY) {
+        for (y in maxY downTo minY) {
             for (x in minX..maxX) {
                 if (colours.getOrDefault(Point(x,y), 0) == 0L) print(" ") else print("#")
             }
